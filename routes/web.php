@@ -1,18 +1,25 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BabyKidController;
+use App\Http\Controllers\BeautyHealthController;
+use App\Http\Controllers\FoodBeverageController;
+use App\Http\Controllers\HomeCareController;
+use App\Http\Controllers\PenjualanController;
 use Illuminate\Support\Facades\Route;
+//home
+Route::get('/', [HomeController::class, 'index']);
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
+//Category dengan subcategory
+Route::prefix('category')->group(function () {
+    Route::get('/foodbeverage', [FoodBeverageController::class, 'index']);
+    Route::get('/homecare', [HomeCareController::class, 'index']);
+    Route::get('/babykid', [BabyKidController::class, 'index']);
+    Route::get('/beautyhealth', [BeautyHealthController::class, 'index']);
 });
+
+//User view
+Route::get('/id/{id}/name/{name}', [UserController::class, 'index']);
+//Penjualan View
+Route::get('/penjualan', [PenjualanController::class, 'index']);
