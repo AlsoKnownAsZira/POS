@@ -69,14 +69,22 @@ use Illuminate\Support\Facades\Hash;
 // }
 
 //Prak JS Eloquent 2.1
-Class UserController extends Controller{
+// Class UserController extends Controller{
+//    public function index(){
+//       // $user = UserModel::find(1);
+//       // $user = UserModel::where('level_id',1)->first();
+//       // $user = UserModel::firstWhere('level_id',1);
+//       $user =  UserModel::findOr(1,['username','nama'], function(){
+//          abort(404);
+//       });
+//       return view('user', ['data' => $user]);
+//    }
+// }
+//Prak JS Eloquent 2.2
+class UserController extends Controller{
    public function index(){
-      // $user = UserModel::find(1);
-      // $user = UserModel::where('level_id',1)->first();
-      // $user = UserModel::firstWhere('level_id',1);
-      $user =  UserModel::findOr(20,['username','nama'], function(){
-         abort(404);
-      });
+      // $user = UserModel::findOrFail(1);
+      $user = UserModel::where('username','manager9')->firstOrFail();
       return view('user', ['data' => $user]);
    }
 }
