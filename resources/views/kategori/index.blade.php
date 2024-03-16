@@ -12,7 +12,7 @@
             <div class="card-header">Manage Kategori</div>
             <div class="card-body">
                 {{ $dataTable->table() }}
-                <a class="btn btn-Primary" href="/kategori/create">Tambah Kategori</a>
+                <a class="btn btn-Primary" href="{{ url('/kategori/create') }}">Tambah Kategori</a>
             </div>
         </div>
     </div>
