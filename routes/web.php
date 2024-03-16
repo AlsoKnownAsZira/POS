@@ -47,4 +47,6 @@ Route::prefix('/kategori')->group(function (){
     Route::get('/', [KategoriController::class, 'index']);
     Route::get('/create', [KategoriController::class, 'create']);
     Route::post('/', [KategoriController::class, 'store']);
+    Route::get('/edit/{id}', [KategoriController::class, 'edit'])->name('kategori.edit');
+    Route::put('/update/{id}', [KategoriController::class, 'update'])->name('kategori.update');
 });
