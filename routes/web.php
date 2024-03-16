@@ -10,6 +10,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenjualanController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 //home
 Route::get('/', [HomeController::class, 'index']);
 
@@ -42,3 +43,8 @@ Route::get('/user/hapus/{id}',[UserController::class, 'hapus']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::prefix('/kategori')->group(function (){
+    Route::get('/', [KategoriController::class, 'index']);
+    Route::get('/create', [KategoriController::class, 'create']);
+    Route::post('/', [KategoriController::class, 'store']);
+});
