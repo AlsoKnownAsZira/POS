@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeCareController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\POSController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 //home
@@ -39,7 +40,7 @@ Route::post('/user/tambah_simpan',[UserController::class, 'tambah_simpan']);
 Route::get('/user/ubah/{id}',[UserController::class, 'ubah']);
 Route::put('/user/ubah_simpan/{id}',[UserController::class, 'ubah_simpan']);
 Route::get('/user/hapus/{id}',[UserController::class, 'hapus']);
-
+Route::resource('m_user',POSController::class);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

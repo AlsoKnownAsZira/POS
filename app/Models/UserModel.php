@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,17 +10,19 @@ class UserModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_user'; //mendefnisikan nama tabel yang digunakan model
-    protected $primaryKey = 'user_id'; //mendefinisikan primary key dari tabel
+    protected $table = "m_user";
+    public $timestamps = false;
+    protected $primaryKey = 'user_id';
+    protected $fillable = [
+        'user_id',
+        'level_id',
+        'username',
+        'nama',
+        'password',
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     * 
-     * @var array
-     */
-    protected $fillable = ['level_id', 'username', 'nama', 'password'];
-
-    public function level(): BelongsTo{
+    public function level(): BelongsTo
+    {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
 }
