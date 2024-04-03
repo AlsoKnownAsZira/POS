@@ -54,3 +54,13 @@ Route::prefix('/kategori')->group(function (){
     Route::put('/update/{id}', [KategoriController::class, 'update'])->name('kategori.update');
     Route::get('/delete/{id}', [KategoriController::class, 'destroy'])->name('kategori.delete');
 });
+Route::prefix('user')->group(function () {
+    Route::get('/', [userController::class, 'index']);
+    Route::post('/list', [userController::class, 'list']);
+    Route::get('/create', [userController::class, 'create']);
+    Route::post('/', [userController::class, 'store']);
+    Route::get('/{id}', [userController::class, 'show']);
+    Route::get('/{id}/edit', [userController::class, 'edit']);
+    Route::put('/{id}', [userController::class, 'update']);
+    Route::delete('/{id}', [userController::class, 'destroy']);
+});
