@@ -22,7 +22,8 @@ class UserController extends Controller
          'title' => 'Daftar User yang terdaftar dalam sistem'
       ];
       $activeMenu = 'user';
-      return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+      $level = LevelModel::all();
+      return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page,'level'=> $level, 'activeMenu' => $activeMenu]);
    }
    public function tambah()
    {
