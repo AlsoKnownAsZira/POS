@@ -6,23 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserModel extends Model
+class userModel extends Model
 {
     use HasFactory;
 
-    protected $table = "m_user";
-    public $timestamps = false;
-    protected $primaryKey = 'user_id';
-    protected $fillable = [
-        'user_id',
-        'level_id',
-        'username',
-        'nama',
-        'password',
-    ];
+    protected $table = 'm_user'; //to define the name of the table used
+    protected $primaryKey = 'user_id'; //to define the primary key of the table used
+
+//    protected $fillable = ['level_id', 'username', 'nama', 'password'];
+    protected $fillable = ['level_id', 'username', 'nama', 'password'];
 
     public function level(): BelongsTo
     {
-        return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+        return $this->belongsTo(levelModel::class, 'level_id', 'level_id');
     }
 }
