@@ -103,7 +103,7 @@ class TransaksiPenjualanController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $isKodePenjualan = PenjualanModel::where('penjualan_kode', $request->penjualan_kode)->first();
+        $isKodePenjualan = PenjualanModel::where('penjualan_id', $request->penjualan_id)->first();
         $isPengelola = PenjualanModel::where('user_id', $request->user_id)->first();
         if ($isKodePenjualan and $isPengelola) {
             $penjualan_id = $isKodePenjualan->penjualan_id;
@@ -111,7 +111,7 @@ class TransaksiPenjualanController extends Controller
             $penjualan_id = PenjualanModel::insertGetId([
                 'user_id' => $request->user_id,
                 'pembeli' => $request->pembeli,
-                'penjualan_kode' => $request->penjualan_kode,
+                'penjualan_id' => $request->penjualan_id,
                 'penjualan_tanggal' => now(),
             ]);
         }

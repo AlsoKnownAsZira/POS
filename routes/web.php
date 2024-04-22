@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\barangController;
 use App\Http\Controllers\stokController;
 use App\Http\Controllers\TransaksiPenjualanController;
+
+
 //home
 Route::get('/', [HomeController::class, 'index']);
 
@@ -59,17 +61,17 @@ Route::prefix('/kategori')->group(function () {
     Route::get('/delete/{id}', [KategoriController::class, 'destroy'])->name('kategori.delete');
 });
 Route::prefix('user')->group(function () {
-    Route::get('/', [userController::class, 'index']);
-    Route::post('/list', [userController::class, 'list']);
-    Route::get('/create', [userController::class, 'create']);
-    Route::post('/', [userController::class, 'store']);
-    Route::get('/{id}', [userController::class, 'show']);
-    Route::get('/{id}/edit', [userController::class, 'edit']);
-    Route::put('/{id}', [userController::class, 'update']);
-    Route::delete('/{id}', [userController::class, 'destroy']);
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/list', [UserController::class, 'list']);
+    Route::get('/create', [UserController::class, 'create']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::get('/{id}/edit', [UserController::class, 'edit']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
 });
-Route::resource('level', levelController::class);
-Route::post('level/list', [levelController::class, 'list']);
+Route::resource('level', LevelController::class);
+Route::post('level/list', [LevelController::class, 'list']);
 
 Route::resource('kategori', kategoriController::class);
 Route::post('kategori/list', [kategoriController::class, 'list']);
@@ -84,5 +86,5 @@ Route::resource('penjualan', TransaksiPenjualanController::class);
 Route::post('penjualan/list', [TransaksiPenjualanController::class, 'list']);
 
 
-Route::get('/m_user', 'UserController@index')->name('m_user.index');
-Route::put('/m_user/{id}', 'UserController@update')->name('m_user.update');
+Route::get('/m_user', [UserController::class,'index'])->name('m_user.index');
+Route::put('/m_user/{id}', [UserController::class,'update'])->name('m_user.update');
