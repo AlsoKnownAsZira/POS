@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BabyKidController;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\barangController;
 use App\Http\Controllers\stokController;
 use App\Http\Controllers\TransaksiPenjualanController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ManagerController;
 
 
 //home
@@ -88,3 +91,31 @@ Route::post('penjualan/list', [TransaksiPenjualanController::class, 'list']);
 
 Route::get('/m_user', [UserController::class,'index'])->name('m_user.index');
 Route::put('/m_user/{id}', [UserController::class,'update'])->name('m_user.update');
+
+
+Route::group(['middleware' => ['guest']], function () {
+    Route::get('login', [AuthController::class, 'index'])->name('login');
+    Route::get('register', [AuthController::class, 'register'])->name('register');
+    Route::post('proses_login', [AuthController::class, 'proses_login'])->name('proses_login');
+    Route::post('proses_register', [AuthController::class, 'proses_register'])->name('proses_register');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+});
+/**
+ * use Authentication class using middleware aliases in http/kernel
+ * to redirect users when they are not authenticate
+ */
+Route::group(['middleware' => ['auth']], function () {
+
+    /**
+     * if user is admin
+     */
+    Route::group(['middleware' => ['cek_login:1']], function () {
+        Route::resource('admin', AdminController::class);
+    });
+    /**
+     * if user is manager
+     */
+    Route::group(['middleware' => ['cek_login:2']], function () {
+        Route::resource('manager', ManagerController::class);
+    });
+});

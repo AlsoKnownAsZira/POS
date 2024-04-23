@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-class userModel extends Model
+use Illuminate\Foundation\Auth\User as UserAuth;
+class userModel extends UserAuth
 {
     use HasFactory;
 
