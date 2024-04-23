@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class ManagerController extends Controller
 {
- public function index()
- {
-    return view('manager');
- }
+    public function index()
+    {
+        return view('manager');
+    }
 }

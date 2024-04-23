@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\userModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

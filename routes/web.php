@@ -93,13 +93,13 @@ Route::get('/m_user', [UserController::class,'index'])->name('m_user.index');
 Route::put('/m_user/{id}', [UserController::class,'update'])->name('m_user.update');
 
 
-Route::group(['middleware' => ['guest']], function () {
-    Route::get('login', [AuthController::class, 'index'])->name('login');
-    Route::get('register', [AuthController::class, 'register'])->name('register');
-    Route::post('proses_login', [AuthController::class, 'proses_login'])->name('proses_login');
-    Route::post('proses_register', [AuthController::class, 'proses_register'])->name('proses_register');
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-});
+
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('proses_login', [AuthController::class, 'proses_login'])->name('proses_login');
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('proses_register', [AuthController::class, 'proses_register'])->name('proses_register');
+
 /**
  * use Authentication class using middleware aliases in http/kernel
  * to redirect users when they are not authenticate
