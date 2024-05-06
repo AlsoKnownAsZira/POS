@@ -33,14 +33,14 @@ class BarangController extends Controller
         }
 
         // Check if file image is present in the request
-        if ($request->hasFile('image_barang')) {
+        if ($request->hasFile('image')) {
             $barang = barangModel::create([
                 'kategori_id' => $request->kategori_id,
                 'barang_kode' => $request->barang_kode,
                 'barang_nama' => $request->barang_nama,
                 'harga_beli' => $request->harga_beli,
                 'harga_jual' => $request->harga_jual,
-                'image' => $request->image_barang->hashName(),
+                'image' => $request->image->hashName(),
             ]);
         } else {
             return response()->json([

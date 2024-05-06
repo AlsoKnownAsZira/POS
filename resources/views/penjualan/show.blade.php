@@ -25,7 +25,7 @@
                         </tr>
                         <tr>
                             <th>Kode Penjualan</th>
-                            <td>{{ $item->penjualan->penjualan_kode }}</td>
+                            <td>{{ $item->penjualan->penjualan_id}}</td>
                         </tr>
                         <tr>
                             <th>Barang Nama</th>
@@ -38,6 +38,10 @@
                         <tr>
                             <th>Jumlah</th>
                             <td>{{ $item->jumlah }}</td>
+                        </tr>
+                        <tr>
+                            <th>Gambar Barang</th>
+                            <td><img src="{{ asset('storage/posts/' . $item->barang->image) }}" alt="Image" style="width: 100px; height: 100px;"></td>
                         </tr>
                     </table>
                     @php
