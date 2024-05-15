@@ -61,19 +61,32 @@ class FileUploadController extends Controller
         // echo "Tampilkan link:<a href='$pathBaru'>$pathBaru</a>";
 
         //Move file
+        // $request->validate([
+        //     'berkas' => 'required|file|image|max:500'
+        // ]);
+        // $extfile = $request->berkas->getClientOriginalName();
+        // $namaFile = 'web-' . time() . "." . $extfile;
+        // $path = $request->berkas->storeAs('public', $namaFile);
+        // $path = str_replace("\\", "//", $path);
+        // echo "Variabel path berisi:$path <br>";
+
+
+        // $pathBaru = asset('gambar/' . $namaFile);
+        // echo "file berhasil diupload dan berada di: $path";
+        // echo "<br>";
+        // echo "Tampilkan link:<a href='$pathBaru'>$pathBaru</a>";
+
         $request->validate([
             'berkas' => 'required|file|image|max:500'
         ]);
-        $extfile=$request->berkas->getClientOriginalName();
-        $namaFile='web-'.time().".".$extfile;
-        $path = $request->berkas->storeAs('public',$namaFile);
-        $path =str_replace("\\","//",$path);
-        echo "Variabel path berisi:$path <br>";
 
+        $extFile = $request->berkas->getClientOriginalExtension();
+        $namaFileInput = $request->input('nama_file');
+        $namaFile = $namaFileInput . '.' . $extFile;
+        $path = $request->berkas->move('gambar', $namaFile);
+        $path = str_replace("\\", "//", $path);
+        $pathBaru = asset('gambar/' . $namaFile);
 
-        $pathBaru=asset('gambar/'.$namaFile);
-        echo "file berhasil diupload dan berada di: $path";
-        echo "<br>";
-        echo "Tampilkan link:<a href='$pathBaru'>$pathBaru</a>";
+        return view('file-upload', ['pathBaru' => $pathBaru]);
     }
 }
