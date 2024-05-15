@@ -34,4 +34,25 @@ class userModel extends Authenticable implements JWTSubject
             get: fn ($image) => url('/storage/posts/' . $image),
         );
     }
+    public function getImageAttribute()
+    {
+        return asset('gambar/' . $this->attributes['image']);
+    }
+
+    public function updateImage($image)
+    {
+        if ($image) {
+            // Hapus gambar lama jika ada
+            if ($this->image && file_exists(public_path('gambar/' . $this->image))) {
+                unlink(public_path('gambar/' . $this->image));
+            }
+
+            // Upload gambar baru
+            $fileName = $image->hashName();
+            $image->move(public_path('gambar'), $fileName);
+
+            // Set atribut image dengan nama file baru
+            $this->image = $fileName;
+        }
+    }
 }

@@ -34,6 +34,9 @@ class barangModel extends Model
         return $this->belongsTo(kategoriModel::class, 'kategori_id', 'kategori_id');
     }
 
-    
+    public function getImageAttribute()
+    {
+        return asset('gambar/' . $this->attributes['image']);
+    }
 
 }

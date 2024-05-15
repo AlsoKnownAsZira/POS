@@ -27,16 +27,16 @@ class barangController extends Controller
         $activeMenu = 'barang';
         $kategori = kategoriModel::all();
 
-        return view('barang.index', ['breadcrumb' => $breadcrumb, 'page' => $page,
-            'kategori' => $kategori, 'activeMenu' => $activeMenu]);
+        return view('barang.index', [
+            'breadcrumb' => $breadcrumb, 'page' => $page,
+            'kategori' => $kategori, 'activeMenu' => $activeMenu
+        ]);
     }
 
     public function list(Request $request)
     {
-        $barangs = barangModel::select('barang_id', 'barang_kode', 'barang_nama',
-            'harga_beli', 'harga_jual', 'kategori_id')->with('kategori');
-
-//        FIltering data
+        $barangs = BarangModel::select('barang_id', 'kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'image')->with('kategori');
+        //        FIltering data
         if ($request->kategori_id) {
             $barangs->where('kategori_id', $request->kategori_id);
         }
@@ -68,28 +68,37 @@ class barangController extends Controller
         $kategori = kategoriModel::all();
         $activeMenu = 'barang';
 
-        return view('barang.create', ['breadcrumb' => $breadcrumb, 'page' => $page,
-            'kategori' => $kategori, 'activeMenu' => $activeMenu]);
+        return view('barang.create', [
+            'breadcrumb' => $breadcrumb, 'page' => $page,
+            'kategori' => $kategori, 'activeMenu' => $activeMenu
+        ]);
     }
 
-    public function store(BarangRequest $request): RedirectResponse
+   public function store(Request $request)
     {
+        $request->merge([
+            'image' => $request->file('image')
+        ]);
         $request->validate([
-            'barang_kode' => 'required|string|min:3|unique:m_barang,barang_kode',
-            'barang_nama' => 'required|string|max:100',
+            'barang_kode' => 'required|string|max:10',
+            'barang_nama' => 'required|string|max:100|unique:m_barang,barang_nama',
             'harga_beli' => 'required|integer',
             'harga_jual' => 'required|integer',
-            'kategori_id' => 'required|integer'
+            'kategori_id' => 'required|integer',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5048'
         ]);
+        $image = $request->file('image');
+        $fileName = $image->hashName();
+        $image->move(public_path('gambar'), $fileName);
 
-        barangModel::create([
+        BarangModel::create([
             'barang_kode' => $request->barang_kode,
             'barang_nama' => $request->barang_nama,
-            'harga_beli' => $request->harga_beli,
             'harga_jual' => $request->harga_jual,
+            'harga_beli' => $request->harga_beli,
             'kategori_id' => $request->kategori_id,
+            'image' => $fileName,
         ]);
-
         return redirect('/barang')->with('success', 'Data barang berhasil disimpan');
     }
 
@@ -108,8 +117,10 @@ class barangController extends Controller
 
         $activeMenu = 'barang';
 
-        return view('barang.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang,
-            'activeMenu' => $activeMenu]);
+        return view('barang.show', [
+            'breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang,
+            'activeMenu' => $activeMenu
+        ]);
     }
 
     public function edit(string $id)
@@ -128,8 +139,10 @@ class barangController extends Controller
 
         $activeMenu = 'barang';
 
-        return view('barang.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang,
-            'kategori' => $kategori, 'activeMenu' => $activeMenu]);
+        return view('barang.edit', [
+            'breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang,
+            'kategori' => $kategori, 'activeMenu' => $activeMenu
+        ]);
     }
 
     public function update(Request $request, string $id)

@@ -7,6 +7,7 @@ use App\Models\UserModel;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\LevelModel;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserController extends Controller
 {
@@ -23,7 +24,7 @@ class UserController extends Controller
       ];
       $activeMenu = 'user';
       $level = LevelModel::all();
-      return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page,'level'=> $level, 'activeMenu' => $activeMenu]);
+      return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
    }
    public function tambah()
    {
@@ -68,8 +69,7 @@ class UserController extends Controller
    // Ambil data user dalam bentuk json untuk datatables
    public function list(Request $request)
    {
-      $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
-         ->with('level');
+      $users = userModel::select(['user_id', 'username', 'nama', 'level_id', 'image'])->with('level');
       return DataTables::of($users)
          ->addIndexColumn() // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
          ->addColumn('aksi', function ($user) { // menambahkan kolom aksi
@@ -102,18 +102,25 @@ ini?\');">Hapus</button></form>';
    }
    public function store(Request $request)
    {
+      $request->merge([
+         'image' => $request->file('image')
+      ]);
       $request->validate([
          'username' => 'required|string|min:3|unique:m_user,username',
          'nama' => 'required|string|max:100',
          'password' => 'required|string|min:5',
-         'level_id' => 'required|integer'
+         'level_id' => 'required|integer',
+         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
-
+      $image = $request->file('image');
+      $fileName = $image->hashName();
+      $image->move(public_path('gambar'), $fileName);
       userModel::create([
          'username' => $request->username,
          'nama' => $request->nama,
          'password' => bcrypt($request->password),
          'level_id' => $request->level_id,
+         'image' => $fileName,
       ]);
 
       return redirect('/user')->with('success', 'Data user berhasil disimpan');
@@ -156,36 +163,42 @@ ini?\');">Hapus</button></form>';
 
    public function update(Request $request, string $id)
    {
+      $request->merge([
+         'image' => $request->file('image')
+      ]);
       $request->validate([
          'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id',
          'nama' => 'required|string|max:100',
          'password' => 'nullable|string|min:5',
-         'level_id' => 'required|integer'
+         'level_id' => 'required|integer',
+         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
 
-      userModel::find($id)->update([
-         'username' => $request->username,
-         'nama' => $request->nama,
-         'password' => $request->password ? bcrypt($request->password) : userModel::find($id)->password,
-         'level_id' => $request->level_id,
+      $user = userModel::find($id);
+      $user->update([
+          'username' => $request->username,
+          'nama' => $request->nama,
+          'password' => $request->password ? bcrypt($request->password) : $user->password,
+          'level_id' => $request->level_id,
+          'image' => $user->updateImage($request->file('image')),
       ]);
 
       return redirect('/user')->with('success', 'Data user berhasil diubah');
    }
    public function destroy(string $id)
-    {
-        $check = userModel::find($id);
-        if (!$check) {
-            return redirect('/user')->with('error', 'Data user tidak ditermukan');
-        }
+   {
+      $check = userModel::find($id);
+      if (!$check) {
+         return redirect('/user')->with('error', 'Data user tidak ditermukan');
+      }
 
-        try {
-            userModel::destroy($id);
+      try {
+         userModel::destroy($id);
 
-            return redirect('/user')->with('success', 'Data user berhasil dihapus');
-        } catch (\Illuminate\Database\QueryException $e) {
+         return redirect('/user')->with('success', 'Data user berhasil dihapus');
+      } catch (\Illuminate\Database\QueryException $e) {
 
-            return redirect('/user')->with('error', 'Data user gagal dihapus, karena masih terdapat tabel lain yang terkait dengan data ini');
-        }
-    }
+         return redirect('/user')->with('error', 'Data user gagal dihapus, karena masih terdapat tabel lain yang terkait dengan data ini');
+      }
+   }
 }
