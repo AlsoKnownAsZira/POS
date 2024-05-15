@@ -20,7 +20,7 @@ use App\Http\Controllers\stokController;
 use App\Http\Controllers\TransaksiPenjualanController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManagerController;
-
+use App\Http\Controllers\FileUploadController;
 
 //home
 Route::get('/', [HomeController::class, 'index']);
@@ -119,3 +119,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('manager', ManagerController::class);
     });
 });
+
+Route::get('/file-upload', [FileUploadController::class, 'fileUpload']);
+Route::post('/file-upload', [FileUploadController::class, 'prosesFileUpload']);
